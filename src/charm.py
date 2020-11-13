@@ -1,38 +1,25 @@
 #!/usr/bin/env python3
-# Copyright 2020 Danilo
-# See LICENSE file for licensing details.
 
 import logging
 
 from ops.charm import CharmBase
 from ops.main import main
-from ops.framework import StoredState
 
 logger = logging.getLogger(__name__)
 
 
-class JujuCharmCharm(CharmBase):
-    _stored = StoredState()
-
+class MyCharm(CharmBase):
     def __init__(self, *args):
         super().__init__(*args)
-        self.framework.observe(self.on.config_changed, self._on_config_changed)
-        self.framework.observe(self.on.fortune_action, self._on_fortune_action)
-        self._stored.set_default(things=[])
+        self.framework.observe(self.on.install, self.on_install)
 
-    def _on_config_changed(self, _):
-        current = self.model.config["thing"]
-        if current not in self._stored.things:
-            logger.debug("found a new thing: %r", current)
-            self._stored.things.append(current)
+    def on_install(self, event):
+        logger.info("Congratulations, the charm was properly installed!")
 
-    def _on_fortune_action(self, event):
-        fail = event.params["fail"]
-        if fail:
-            event.fail(fail)
-        else:
-            event.set_results({"fortune": "A bug in the code is worth two in the documentation."})
+    def on_start(self, event):
+        logger.info("helloDanilo")
+        # Handle the start event here.
 
 
 if __name__ == "__main__":
-    main(JujuCharmCharm)
+    main(MyCharm)
