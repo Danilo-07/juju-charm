@@ -5,6 +5,8 @@ import logging
 from ops.charm import CharmBase
 from ops.main import main
 
+from src.app import App
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,9 +19,10 @@ class MyCharm(CharmBase):
         logger.info("Congratulations, the charm was properly installed!")
 
     def on_start(self, event):
-        logger.info("helloDanilo")
         # Handle the start event here.
-
+        logger.info("hello")
+        app = App()
+        app.run()
 
 if __name__ == "__main__":
     main(MyCharm)
